@@ -1,7 +1,7 @@
 # hosts
 
 [webservers]
-server1 ansible_host=3.86.5.200
+server1 ansible_host=minecraft.hatchhome.com
 
 [local]
 control ansible_connection=local
