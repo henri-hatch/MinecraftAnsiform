@@ -1,0 +1,7 @@
+# hosts
+
+[webservers]
+server1 ansible_host=3.86.5.200
+
+[local]
+control ansible_connection=local

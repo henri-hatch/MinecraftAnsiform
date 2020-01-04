@@ -1,0 +1,28 @@
+#InstallMinecraft
+
+  - hosts: webservers
+    become: true
+
+    vars_prompt:
+      - name: "check_mods"
+        prompt: "With mods?"
+
+    tasks:
+
+      - name: Installing pip
+        yum:
+          name: python-pip
+          state: latest
+
+      - name:           Ensure botocore and boto3 modules are installed
+        pip:
+          name:         [ "boto3", "botocore"]
+          extra_args:   "--user"
+
+      - name: Copying Vanilla Files
+        command: "aws s3 cp s3://ansibleminecraftserver/vanillaserver . --recursive"
+        when: check_mods == "no"
+
+      - name: Copying Modded Files
+        command: "aws s3 cp s3://ansibleminecraftserver/forgeserver . --recursive"
+        when: check_mods == "yes"
