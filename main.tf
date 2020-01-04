@@ -61,7 +61,9 @@ resource "aws_instance" "minecraftserver" {
     inline = [
       "sudo yum update -y",
       "sudo amazon-linux-extras install epel-release -y",
-      "sudo amazon-linux-extras install ansible2 -y"
+      "sudo amazon-linux-extras install ansible2 -y",
+      "sudo aws s3 cp s3://minecraft-ansible/ . --recursive",
+      "ansible-playbook /home/ec2-user/{var.servertype}"
     ]
   }
 }

@@ -1,0 +1,19 @@
+#InstallMinecraft
+
+  - hosts: webservers
+    become: true
+
+    tasks:
+
+      - name: Installing pip
+        yum:
+          name: python-pip
+          state: latest
+
+      - name:           Ensure botocore and boto3 modules are installed
+        pip:
+          name:         [ "boto3", "botocore"]
+          extra_args:   "--user"
+
+      - name: Copying Modded Files
+        command: "aws s3 cp s3://ansibleminecraftserver/forgeserver . --recursive"
