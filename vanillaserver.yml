@@ -1,6 +1,6 @@
 #InstallMinecraft
 
-  - hosts: webservers
+  - hosts: local
     become: true
 
     tasks:
