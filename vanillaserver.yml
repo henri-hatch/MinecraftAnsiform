@@ -4,10 +4,13 @@
     become: true
 
     tasks:
-      - name:           Ensure botocore and boto3 modules are installed
-        pip:
-          name:         [ "boto3", "botocore"]
-          extra_args:   "--user"
+      - name: Fixing Pip
+        yum:
+          name: python36
+          state: latest
+    
+      - name: Installing Boto3
+        command: "sudo pip install boto3"
 
       - name: Copying Vanilla Files
         command: "aws s3 cp s3://ansibleminecraftserver/vanillaserver . --recursive"

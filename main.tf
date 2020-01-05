@@ -78,3 +78,6 @@ resource "aws_route53_record" "minecraft_hatchhome_record" {
   ttl     = "30"
   records = [aws_instance.minecraftserver.public_ip]
 }
+
+#sudo yum install python36
+#
