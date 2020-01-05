@@ -1,15 +1,9 @@
-#InstallMinecraft
+#VanillaServer
 
   - hosts: local
     become: true
 
     tasks:
-
-      - name: Installing pip
-        yum:
-          name: python-pip
-          state: latest
-
       - name:           Ensure botocore and boto3 modules are installed
         pip:
           name:         [ "boto3", "botocore"]
