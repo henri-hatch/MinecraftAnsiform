@@ -5,7 +5,7 @@ variable "region" {
 variable "amis" {
   type = map(string)
   default = {
-    "us-east-1" = "ami-00068cd7555f543d5"
+    "us-east-1" = "ami-00eb20669e0990cb4"
     "us-east-2" = "ami-4b32be2b"
   }
 }
@@ -29,6 +29,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port = 25565
     to_port   = 25565
     protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -60,8 +61,10 @@ resource "aws_instance" "minecraftserver" {
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
-      "sudo amazon-linux-extras install epel-release -y",
-      "sudo amazon-linux-extras install ansible2 -y",
+      "sudo yum-config-manager --enable epel",
+      "sudo yum install ansible -y",
+      "sudo yum install java-1.8.0 -y",
+      "sudo yum remove java-1.7.0 -y",
       "sudo aws s3 cp s3://minecraft-ansible/ . --recursive",
       "ansible-playbook /home/ec2-user/${var.servertype}server.yml"
     ]
