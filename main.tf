@@ -26,9 +26,9 @@ resource "aws_security_group" "allow_ssh" {
   }
 
   ingress {
-    from_port = 25565
-    to_port   = 25565
-    protocol  = "tcp"
+    from_port   = 25565
+    to_port     = 25565
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -67,6 +67,13 @@ resource "aws_instance" "minecraftserver" {
       "sudo yum remove java-1.7.0 -y",
       "sudo aws s3 cp s3://minecraft-ansible/ . --recursive",
       "ansible-playbook /home/ec2-user/${var.servertype}server.yml"
+    ]
+  }
+
+  provisioner "remote-exec" {
+    when = destroy
+    inline = [
+      "aws s3 cp . s3://ansibleminecraftserver/vanillaserver --recursive"
     ]
   }
 }
