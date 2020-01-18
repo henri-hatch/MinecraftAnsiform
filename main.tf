@@ -73,7 +73,7 @@ resource "aws_instance" "minecraftserver" {
   provisioner "remote-exec" {
     when = destroy
     inline = [
-      "aws s3 cp . s3://ansibleminecraftserver/vanillaserver --recursive"
+      "aws s3 cp . s3://ansibleminecraftserver/${var.servertype}server --recursive"
     ]
   }
 }
