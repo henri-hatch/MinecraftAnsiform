@@ -12,5 +12,5 @@
       - name: Installing Boto3
         command: "sudo pip install boto3"
 
-      - name: Copying Vanilla Files
-        command: "aws s3 cp s3://ansibleminecraftserver/forgeserver . --recursive"
+      - name: Copying Modded Files
+        command: "aws s3 cp s3://ansibleminecraftserver/moddedserver . --recursive"
