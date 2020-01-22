@@ -40,6 +40,10 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
+resource "aws_vpc" "minecraftvpc" {
+  cidr_block = "124.88.135.144/16"
+}
+
 
 resource "aws_instance" "minecraftserver" {
   ami                  = var.amis[var.region]
