@@ -17,6 +17,7 @@ provider "aws" {
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "Allow SSH inbound traffic"
+  vpc_id      = aws_vpc.minecraftvpc.id
 
   ingress {
     from_port   = 22
@@ -41,7 +42,31 @@ resource "aws_security_group" "allow_ssh" {
 }
 
 resource "aws_vpc" "minecraftvpc" {
-  cidr_block = "124.88.135.144/16"
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_internet_gateway" "mc_ig" {
+  vpc_id = aws_vpc.minecraftvpc.id
+}
+
+resource "aws_route_table" "mc_rt" {
+  vpc_id = aws_vpc.minecraftvpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.mc_ig.id
+  }
+}
+
+resource "aws_subnet" "mc_subnet" {
+  vpc_id                  = aws_vpc.minecraftvpc.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_route_table_association" "mc_rta" {
+  subnet_id      = aws_subnet.mc_subnet.id
+  route_table_id = aws_route_table.mc_rt.id
 }
 
 
@@ -49,6 +74,7 @@ resource "aws_instance" "minecraftserver" {
   ami                  = var.amis[var.region]
   instance_type        = "t2.small"
   iam_instance_profile = "s3AdminAccess"
+  subnet_id            = aws_subnet.mc_subnet.id
   tags = {
     Name = "minecraft"
   }
